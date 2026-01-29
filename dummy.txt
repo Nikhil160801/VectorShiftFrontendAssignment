@@ -1,0 +1,431 @@
+The file folder structure is given in image attached.
+
+//main.py code:
+
+from fastapi import FastAPI, Form
+
+app = FastAPI()
+
+@app.get('/')
+def read_root():
+    return {'Ping': 'Pong'}
+
+@app.get('/pipelines/parse')
+def parse_pipeline(pipeline: str = Form(...)):
+    return {'status': 'parsed'}
+
+// inputNode.js
+
+import { useState } from 'react';
+import { Handle, Position } from 'reactflow';
+
+export const InputNode = ({ id, data }) => {
+  const [currName, setCurrName] = useState(data?.inputName || id.replace('customInput-', 'input_'));
+  const [inputType, setInputType] = useState(data.inputType || 'Text');
+
+  const handleNameChange = (e) => {
+    setCurrName(e.target.value);
+  };
+
+  const handleTypeChange = (e) => {
+    setInputType(e.target.value);
+  };
+
+  return (
+    <div style={{width: 200, height: 80, border: '1px solid black'}}>
+      <div>
+        <span>Input</span>
+      </div>
+      <div>
+        <label>
+          Name:
+          <input 
+            type="text" 
+            value={currName} 
+            onChange={handleNameChange} 
+          />
+        </label>
+        <label>
+          Type:
+          <select value={inputType} onChange={handleTypeChange}>
+            <option value="Text">Text</option>
+            <option value="File">File</option>
+          </select>
+        </label>
+      </div>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id={`${id}-value`}
+      />
+    </div>
+  );
+}
+
+// llmNode.js
+
+import { Handle, Position } from 'reactflow';
+
+export const LLMNode = ({ id, data }) => {
+
+  return (
+    <div style={{width: 200, height: 80, border: '1px solid black'}}>
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={`${id}-system`}
+        style={{top: `${100/3}%`}}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={`${id}-prompt`}
+        style={{top: `${200/3}%`}}
+      />
+      <div>
+        <span>LLM</span>
+      </div>
+      <div>
+        <span>This is a LLM.</span>
+      </div>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id={`${id}-response`}
+      />
+    </div>
+  );
+}
+
+// outputNode.js
+
+import { useState } from 'react';
+import { Handle, Position } from 'reactflow';
+
+export const OutputNode = ({ id, data }) => {
+  const [currName, setCurrName] = useState(data?.outputName || id.replace('customOutput-', 'output_'));
+  const [outputType, setOutputType] = useState(data.outputType || 'Text');
+
+  const handleNameChange = (e) => {
+    setCurrName(e.target.value);
+  };
+
+  const handleTypeChange = (e) => {
+    setOutputType(e.target.value);
+  };
+
+  return (
+    <div style={{width: 200, height: 80, border: '1px solid black'}}>
+      <Handle
+        type="target"
+        position={Position.Left}
+        id={`${id}-value`}
+      />
+      <div>
+        <span>Output</span>
+      </div>
+      <div>
+        <label>
+          Name:
+          <input 
+            type="text" 
+            value={currName} 
+            onChange={handleNameChange} 
+          />
+        </label>
+        <label>
+          Type:
+          <select value={outputType} onChange={handleTypeChange}>
+            <option value="Text">Text</option>
+            <option value="File">Image</option>
+          </select>
+        </label>
+      </div>
+    </div>
+  );
+}
+
+
+// textNode.js
+
+import { useState } from 'react';
+import { Handle, Position } from 'reactflow';
+
+export const TextNode = ({ id, data }) => {
+  const [currText, setCurrText] = useState(data?.text || '{{input}}');
+
+  const handleTextChange = (e) => {
+    setCurrText(e.target.value);
+  };
+
+  return (
+    <div style={{width: 200, height: 80, border: '1px solid black'}}>
+      <div>
+        <span>Text</span>
+      </div>
+      <div>
+        <label>
+          Text:
+          <input 
+            type="text" 
+            value={currText} 
+            onChange={handleTextChange} 
+          />
+        </label>
+      </div>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id={`${id}-output`}
+      />
+    </div>
+  );
+}
+
+//App.js
+
+import { PipelineToolbar } from './toolbar';
+import { PipelineUI } from './ui';
+import { SubmitButton } from './submit';
+
+function App() {
+  return (
+    <div>
+      <PipelineToolbar />
+      <PipelineUI />
+      <SubmitButton />
+    </div>
+  );
+}
+
+export default App;
+
+//index.css
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+//index.js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+// store.js
+
+import { create } from "zustand";
+import {
+    addEdge,
+    applyNodeChanges,
+    applyEdgeChanges,
+    MarkerType,
+  } from 'reactflow';
+
+export const useStore = create((set, get) => ({
+    nodes: [],
+    edges: [],
+    getNodeID: (type) => {
+        const newIDs = {...get().nodeIDs};
+        if (newIDs[type] === undefined) {
+            newIDs[type] = 0;
+        }
+        newIDs[type] += 1;
+        set({nodeIDs: newIDs});
+        return `${type}-${newIDs[type]}`;
+    },
+    addNode: (node) => {
+        set({
+            nodes: [...get().nodes, node]
+        });
+    },
+    onNodesChange: (changes) => {
+      set({
+        nodes: applyNodeChanges(changes, get().nodes),
+      });
+    },
+    onEdgesChange: (changes) => {
+      set({
+        edges: applyEdgeChanges(changes, get().edges),
+      });
+    },
+    onConnect: (connection) => {
+      set({
+        edges: addEdge({...connection, type: 'smoothstep', animated: true, markerEnd: {type: MarkerType.Arrow, height: '20px', width: '20px'}}, get().edges),
+      });
+    },
+    updateNodeField: (nodeId, fieldName, fieldValue) => {
+      set({
+        nodes: get().nodes.map((node) => {
+          if (node.id === nodeId) {
+            node.data = { ...node.data, [fieldName]: fieldValue };
+          }
+  
+          return node;
+        }),
+      });
+    },
+  }));
+
+// submit.js
+
+export const SubmitButton = () => {
+
+    return (
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <button type="submit">Submit</button>
+        </div>
+    );
+}
+
+// toolbar.js
+
+import { DraggableNode } from './draggableNode';
+
+export const PipelineToolbar = () => {
+
+    return (
+        <div style={{ padding: '10px' }}>
+            <div style={{ marginTop: '20px', display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                <DraggableNode type='customInput' label='Input' />
+                <DraggableNode type='llm' label='LLM' />
+                <DraggableNode type='customOutput' label='Output' />
+                <DraggableNode type='text' label='Text' />
+            </div>
+        </div>
+    );
+};
+
+// ui.js
+// Displays the drag-and-drop UI
+// --------------------------------------------------
+
+import { useState, useRef, useCallback } from 'react';
+import ReactFlow, { Controls, Background, MiniMap } from 'reactflow';
+import { useStore } from './store';
+import { shallow } from 'zustand/shallow';
+import { InputNode } from './nodes/inputNode';
+import { LLMNode } from './nodes/llmNode';
+import { OutputNode } from './nodes/outputNode';
+import { TextNode } from './nodes/textNode';
+
+import 'reactflow/dist/style.css';
+
+const gridSize = 20;
+const proOptions = { hideAttribution: true };
+const nodeTypes = {
+  customInput: InputNode,
+  llm: LLMNode,
+  customOutput: OutputNode,
+  text: TextNode,
+};
+
+const selector = (state) => ({
+  nodes: state.nodes,
+  edges: state.edges,
+  getNodeID: state.getNodeID,
+  addNode: state.addNode,
+  onNodesChange: state.onNodesChange,
+  onEdgesChange: state.onEdgesChange,
+  onConnect: state.onConnect,
+});
+
+export const PipelineUI = () => {
+    const reactFlowWrapper = useRef(null);
+    const [reactFlowInstance, setReactFlowInstance] = useState(null);
+    const {
+      nodes,
+      edges,
+      getNodeID,
+      addNode,
+      onNodesChange,
+      onEdgesChange,
+      onConnect
+    } = useStore(selector, shallow);
+
+    const getInitNodeData = (nodeID, type) => {
+      let nodeData = { id: nodeID, nodeType: `${type}` };
+      return nodeData;
+    }
+
+    const onDrop = useCallback(
+        (event) => {
+          event.preventDefault();
+    
+          const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+          if (event?.dataTransfer?.getData('application/reactflow')) {
+            const appData = JSON.parse(event.dataTransfer.getData('application/reactflow'));
+            const type = appData?.nodeType;
+      
+            // check if the dropped element is valid
+            if (typeof type === 'undefined' || !type) {
+              return;
+            }
+      
+            const position = reactFlowInstance.project({
+              x: event.clientX - reactFlowBounds.left,
+              y: event.clientY - reactFlowBounds.top,
+            });
+
+            const nodeID = getNodeID(type);
+            const newNode = {
+              id: nodeID,
+              type,
+              position,
+              data: getInitNodeData(nodeID, type),
+            };
+      
+            addNode(newNode);
+          }
+        },
+        [reactFlowInstance]
+    );
+
+    const onDragOver = useCallback((event) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'move';
+    }, []);
+
+    return (
+        <>
+        <div ref={reactFlowWrapper} style={{width: '100wv', height: '70vh'}}>
+            <ReactFlow
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                onInit={setReactFlowInstance}
+                nodeTypes={nodeTypes}
+                proOptions={proOptions}
+                snapGrid={[gridSize, gridSize]}
+                connectionLineType='smoothstep'
+            >
+                <Background color="#aaa" gap={gridSize} />
+                <Controls />
+                <MiniMap />
+            </ReactFlow>
+        </div>
+        </>
+    )
+}
