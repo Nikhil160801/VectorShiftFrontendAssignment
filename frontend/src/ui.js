@@ -12,18 +12,43 @@ import { OutputNode } from './nodes/outputNode';
 import { TextNode } from './nodes/textNode';
 
 import 'reactflow/dist/style.css';
+import { MathNode } from './components/mathNode';
+import { ConditionNode } from './components/conditionNode';
+import { LoggerNode } from './components/loggerNode';
+import { ApiNode } from './components/apiNode';
+import { DelayPipelineNode } from './components/delayNode';
+
+// import { MathNode } from './components/mathNode';
+// import { ConditionNode } from './components/conditionNode';
+// import { DelayNode } from './components/delayNode';
+// import { LoggerNode } from './components/loggerNode';
+// import { ApiNode } from './components/apiNode';
+
+
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
-const nodeTypes = {
-  customInput: InputNode,
-  llm: LLMNode,
-  customOutput: OutputNode,
-  text: TextNode,
-};
-
-const selector = (state) => ({
-  nodes: state.nodes,
+// const nodeTypes = {
+  //   customInput: InputNode,
+  //   llm: LLMNode,
+  //   customOutput: OutputNode,
+  //   text: TextNode,
+  // };
+  const nodeTypes = {
+    customInput: InputNode,
+    llm: LLMNode,
+    customOutput: OutputNode,
+    text: TextNode,
+    math: MathNode,
+    condition: ConditionNode,
+    // delay: DelayNode,
+    delay: DelayPipelineNode,
+    logger: LoggerNode,
+    api: ApiNode,
+  };
+  
+  const selector = (state) => ({
+    nodes: state.nodes,
   edges: state.edges,
   getNodeID: state.getNodeID,
   addNode: state.addNode,

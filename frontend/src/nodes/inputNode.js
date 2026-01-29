@@ -1,8 +1,9 @@
 // inputNode.js
 
 import { useState } from 'react';
-import { BaseNode } from './BaseNode';
+
 import { useStore } from '../store';
+import { BaseNode } from './BaseNode';
 
 export const InputNode = ({ id, data }) => {
   const updateNodeField = useStore(state => state.updateNodeField);
