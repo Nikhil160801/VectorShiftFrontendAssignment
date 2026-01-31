@@ -33,7 +33,7 @@ export const TextNode = ({ id, data }) => {
         value={text}
         onChange={handleChange}
         style={{
-          width: '100%',
+          width: '95%',
           resize: 'none',
           background: 'transparent',
           color: 'var(--text)',

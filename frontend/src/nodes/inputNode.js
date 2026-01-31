@@ -31,7 +31,7 @@ export const InputNode = ({ id, data }) => {
               updateNodeField(id, 'inputName', e.target.value);
             }}
             style={{
-              width: '100%',
+              width: '95%',
               padding: '4px 6px',
               fontSize: 12,
               borderRadius: 4,
