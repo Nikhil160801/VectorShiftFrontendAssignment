@@ -18,22 +18,10 @@ import { LoggerNode } from './components/loggerNode';
 import { ApiNode } from './components/apiNode';
 import { DelayPipelineNode } from './components/delayNode';
 
-// import { MathNode } from './components/mathNode';
-// import { ConditionNode } from './components/conditionNode';
-// import { DelayNode } from './components/delayNode';
-// import { LoggerNode } from './components/loggerNode';
-// import { ApiNode } from './components/apiNode';
-
 
 
 const gridSize = 20;
 const proOptions = { hideAttribution: true };
-// const nodeTypes = {
-  //   customInput: InputNode,
-  //   llm: LLMNode,
-  //   customOutput: OutputNode,
-  //   text: TextNode,
-  // };
   const nodeTypes = {
     customInput: InputNode,
     llm: LLMNode,

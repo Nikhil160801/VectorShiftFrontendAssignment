@@ -12,6 +12,13 @@ code {
     monospace;
 }
 
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+
 input, select {
   width: 100%;
   margin-top: 4px;

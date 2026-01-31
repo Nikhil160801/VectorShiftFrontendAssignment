@@ -1,0 +1,29 @@
+/* Light theme */
+:root {
+  --bg: #f8fafc;
+  --panel-bg: #ffffff;
+  --node-bg: #ffffff;
+
+  /* 👇 DARK BORDER IN LIGHT MODE */
+  --border: #020617;
+
+  --text: #0f172a;
+  --muted-text: #64748b;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+}
+
+/* Dark theme */
+[data-theme='dark'] {
+  --bg: #0f172a;
+  --panel-bg: #020617;
+  --node-bg: #020617;
+
+  /* 👇 WHITE BORDER IN DARK MODE */
+  --border: #ffffff;
+
+  --text: #e5e7eb;
+  --muted-text: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+}

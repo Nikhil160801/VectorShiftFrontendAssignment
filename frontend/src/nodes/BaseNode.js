@@ -4,42 +4,65 @@ export const BaseNode = ({
   title,
   inputs = [],
   outputs = [],
-  children,
   width = 200,
+  children,
 }) => {
   return (
     <div
       style={{
         width,
-        padding: '10px',
-        border: '1px solid #333',
-        borderRadius: '8px',
-        background: '#fff',
+        padding: 10,
+        borderRadius: 8,
+
+        /* 👇 THEME COLORS GO HERE */
+        background: 'var(--node-bg)',
+        border: '1px solid var(--border)',
+        color: 'var(--text)',
+
+        fontSize: 12,
       }}
     >
-      {/* INPUT HANDLES */}
+      {/* Node title */}
+      <div
+        style={{
+          fontWeight: 600,
+          marginBottom: 6,
+          color: 'var(--text)',
+        }}
+      >
+        {title}
+      </div>
+
+      {/* Input handles */}
       {inputs.map((id, index) => (
         <Handle
           key={id}
           type="target"
           position={Position.Left}
           id={id}
-          style={{ top: 40 + index * 20 }}
+          style={{
+            top: 40 + index * 20,
+            background: 'var(--accent)',
+            border: '1px solid var(--border)',
+          }}
         />
       ))}
 
-      <div style={{ fontWeight: 600, marginBottom: '6px' }}>{title}</div>
-
+      {/* Node content */}
       <div>{children}</div>
 
-      {/* OUTPUT HANDLES */}
+      {/* Output handles */}
       {outputs.map((id, index) => (
         <Handle
           key={id}
           type="source"
           position={Position.Right}
           id={id}
-          style={{ top: 40 + index * 20 }}
+          style={{
+            top: 40 + index * 20,
+            background: 'var(--accent)',
+            border: '1px solid var(--border)',
+          }}
         />
       ))}
     </div>

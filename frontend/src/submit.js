@@ -1,5 +1,3 @@
-// submit.js
-
 import { useStore } from './store';
 
 export const SubmitButton = () => {
@@ -15,14 +13,32 @@ export const SubmitButton = () => {
     const data = await res.json();
 
     alert(
-      `Nodes: ${data.num_nodes}\nEdges: ${data.num_edges}\nIs DAG: ${data.is_dag}`
+      `Pipeline Summary\n\nNodes: ${data.num_nodes}\nEdges: ${data.num_edges}\nIs DAG: ${data.is_dag}`
     );
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <button onClick={handleSubmit}>Submit</button>
+    <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>
+      <button
+        onClick={handleSubmit}
+        style={{
+          padding: '6px 14px',
+          fontSize: 12,
+          borderRadius: 6,
+          border: '1px solid var(--accent)',
+          backgroundColor: 'var(--accent)',
+          color: '#fff',
+          cursor: 'pointer',
+        }}
+        onMouseEnter={(e) =>
+          (e.currentTarget.style.backgroundColor = 'var(--accent-hover)')
+        }
+        onMouseLeave={(e) =>
+          (e.currentTarget.style.backgroundColor = 'var(--accent)')
+        }
+      >
+        Submit
+      </button>
     </div>
   );
 };
-
